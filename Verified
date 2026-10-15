@@ -1,0 +1,23 @@
+SELECT 
+    Name,
+    CONCAT(
+        ISNULL(REPLACE(MobilePhone, '+91', '91'), ''),
+        ISNULL(Email, ''),
+        '534019461'
+    ) AS SubscriberKey,
+    Id,
+    Email,
+    Lead_Status__c,
+    Program_Batch__c,
+    Program_Name__c,
+    School__c,
+    REPLACE(MobilePhone, '+91-', '91') AS MobilePhone,
+    CreatedDate,
+    'IN' AS Locale,
+    LastModifiedDate
+
+FROM Lead_Salesforce
+
+WHERE 
+    Lead_Status__c = 'Verified' 
+    AND CreatedDate > '2025-11-01 00:00:01'
