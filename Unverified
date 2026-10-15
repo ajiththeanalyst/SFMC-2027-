@@ -1,0 +1,16 @@
+SELECT 
+    Name,
+    SubscriberKey,
+    Id,
+    Email,
+    Lead_Status__c,
+    Program_Batch__c,
+    School__c,
+    MobilePhone,
+    CreatedDate
+FROM Lead_Master_DataExtension
+WHERE Lead_Status__c = 'Unverified'
+AND CreatedDate > '2026-02-21 00:00:01'
+AND Name NOT LIKE '%test%'
+AND Email NOT LIKE '%test%'
+AND Email NOT LIKE '%yopmail%'
