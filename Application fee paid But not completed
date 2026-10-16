@@ -1,6 +1,6 @@
 SELECT
     a.Id AS Id,
-    a.Name AS Name,
+    
 
     c.Name AS ApplicantName,
     c.Application_Fee_Paid__c AS Application_Fee_Paid__c,
@@ -58,25 +58,11 @@ WHERE
     AND c.MobilePhone IS NOT NULL
     AND a.hed__Application_Status__c IN ('Incomplete', 'Started')
     AND c.Application_Fee_Paid__c = 1
-    AND a.CreatedDate >= '2025-11-01'
-    AND c.Program_Batch_Name__c NOT IN (
-
-        'B.Tech. in CSE (IOT & Cybersecurity including Blockchain Technology)-(2026-2030)',
-        'B. Tech in Mechatronics Engineering-(2026-2030)',
-        'B.Tech in Aerospace Engineering-(2026-2030)',
-        'B. Tech in Mechanical Engineering-(2026-2030)',
-        'B. Tech in Electronics and Computer Engineering-(2026-2030)',
-        'B. Tech in Electronics and Communication Engineering-(2026-2030)',
-        'B.Sc in Bioinformatics, Statistics and Computer Science-(2026-2029)',
-        'B.Sc in Biotechnology, Biochemistry and Genetics-(2026-2029)',
-        'B.Sc in Microbiology, Chemistry, and Genetics-(2026-2029)',
-        'M.Sc. in Bioinformatics-(2026-2028)',
-        'M. Tech in Computer Science and Engineering (Full Time)-(2026-2028)',
-        'M.Tech. in Power Electronics-(2026-2028)',
-        'Bachelor of Physiotherapy-(2026-2030)',
-        'BA - LL.B (Honors)-(2026-2031)',
-        'LL.M-(Business and Corporate Law)-(2026-2027)',
-         'B. Tech in Electrical and Electronics Engineering-(2026-2030)',
-         'B. Tech in Agricultural Engineering-(2026-2030)'
-
-    )
+    AND a.CreatedDate >= '2026-10-14'
+    AND c.Email NOT LIKE '%test%'
+    AND c.Email NOT LIKE '%yopmail%'
+    AND c.CDOE__c = '0'
+    AND c.Name not like '%test%'
+    AND c.Enrolment_Year__c = '2027'
+    AND c.Program_Batch_Name__c LIKE '%2027-%'
+    
