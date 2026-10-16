@@ -1,0 +1,53 @@
+SELECT
+    a.Id AS Id,
+    a.Name AS Name,
+
+    c.Name AS ApplicantName,
+    c.Application_Fee_Paid__c AS Application_Fee_Paid__c,
+    c.Email AS Email,
+    c.MobilePhone AS MobilePhone,
+
+    u.Name AS counselorname,
+    u.MobilePhone AS ownermobilephone,
+    u.IsActive AS IsActive,
+
+    c.CreatedDate AS ApplicantCreatedDate,
+
+    a.hed__Application_Status__c AS hed__Application_Status__c,
+    a.Provisional_Admission_Fee_Paid__c AS Provisional_Admission_Fee_Paid__c,
+
+    c.Program_Batch_Name__c AS Program_Batch_Name__c,
+
+    a.Application_Number__c AS Application_Number__c,
+    c.Student_Full_Name__c AS Student_Full_Name__c,
+
+    a.First_Payment_Date__c AS First_Payment_Date__c,
+
+    CONCAT(
+        COALESCE(c.Email, ''),
+        '_',
+        COALESCE(REPLACE(c.MobilePhone, '+91-', '91'), ''),
+        '_534019461'
+    ) AS [SubscriberKey],
+
+    REPLACE(c.MobilePhone, '+91-', '91') AS ContactMobilePhone,
+
+    'IN' AS Locale
+
+FROM [hed__Application__c_Salesforce] a
+
+INNER JOIN [Contact_Salesforce] c
+    ON a.hed__Applicant__c = c.Id
+
+LEFT JOIN [User_Salesforce] u
+    ON c.OwnerId = u.Id
+
+WHERE
+    c.Application_Fee_Paid__c = '0'
+    AND c.Program_Batch_Name__c LIKE '%2026%'
+    AND c.CreatedDate >= '2025-11-01 00:00:00'
+    AND a.Application_Number__c IS NOT NULL
+    AND a.Application_Number__c <> 'null'
+    AND c.Email IS NOT NULL
+    AND c.Email NOT LIKE '%test%'
+    AND c.Email NOT LIKE '%yopmail%'
