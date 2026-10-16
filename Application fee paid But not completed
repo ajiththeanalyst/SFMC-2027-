@@ -1,20 +1,82 @@
 SELECT
-    CONCAT(
-        Email, 
-        REPLACE(MobilePhone, '+91-', '91'), 
-        '_parent'
-    ) AS SubscriberKey,
-    Student_Full_Name__c,
-    Email,
-    Application_Fee_Paid__c,
-    REPLACE(MobilePhone, '+91-', '91') AS MobilePhone,
-    'IN' AS Locale,
-    hed__Application_Status__c,
-    CreatedDate,
-    LastModifiedDate,
-    LastActivityDate
-FROM contact_with_Application_Master
+    a.Id AS Id,
+    a.Name AS Name,
+
+    c.Name AS ApplicantName,
+    c.Application_Fee_Paid__c AS Application_Fee_Paid__c,
+    c.Email AS ContactEmail,
+
+    u.Name AS counselorname,
+    u.MobilePhone AS ownermobilephone,
+    u.IsActive AS IsActive,
+
+    c.CreatedDate AS ApplicantCreatedDate,
+
+    a.hed__Application_Status__c AS hed__Application_Status__c,
+    a.Provisional_Admission_Fee_Paid__c AS Provisional_Admission_Fee_Paid__c,
+
+    c.Program_Batch_Name__c AS Program_Batch_Name__c,
+
+    a.Application_Number__c AS Application_Number__c,
+    c.Student_Full_Name__c AS Student_Full_Name__c,
+
+    a.First_Payment_Date__c AS First_Payment_Date__c,
+
+    c.Email + '_' +
+    CASE
+        WHEN c.MobilePhone LIKE '+91-%'
+            THEN REPLACE(c.MobilePhone, '+91-', '91')
+        WHEN c.MobilePhone LIKE '91%'
+            THEN c.MobilePhone
+        ELSE '91' + c.MobilePhone
+    END +
+    '_534019461' AS [Subscriber Key],
+
+    CASE
+        WHEN c.MobilePhone LIKE '+91-%'
+            THEN REPLACE(c.MobilePhone, '+91-', '91')
+        WHEN c.MobilePhone LIKE '91%'
+            THEN c.MobilePhone
+        ELSE '91' + c.MobilePhone
+    END AS ContactMobilePhone,
+
+    'IN' AS Locale
+
+FROM [hed__Application__c_Salesforce] a
+
+INNER JOIN [Contact_Salesforce] c
+    ON a.hed__Applicant__c = c.Id
+
+LEFT JOIN [User_Salesforce] u
+    ON c.OwnerId = u.Id
+
+INNER JOIN [Lead_Salesforce] l
+    ON l.ConvertedContactId = c.Id
+
 WHERE
-    hed__Application_Status__c IN ('Incomplete', 'Started')
-    AND Application_Fee_Paid__c ='1'
-    AND CreatedDate >= '2025-11-01'
+    c.Email IS NOT NULL
+    AND c.MobilePhone IS NOT NULL
+    AND a.hed__Application_Status__c IN ('Incomplete', 'Started')
+    AND c.Application_Fee_Paid__c = 1
+    AND a.CreatedDate >= '2025-11-01'
+    AND c.Program_Batch_Name__c NOT IN (
+
+        'B.Tech. in CSE (IOT & Cybersecurity including Blockchain Technology)-(2026-2030)',
+        'B. Tech in Mechatronics Engineering-(2026-2030)',
+        'B.Tech in Aerospace Engineering-(2026-2030)',
+        'B. Tech in Mechanical Engineering-(2026-2030)',
+        'B. Tech in Electronics and Computer Engineering-(2026-2030)',
+        'B. Tech in Electronics and Communication Engineering-(2026-2030)',
+        'B.Sc in Bioinformatics, Statistics and Computer Science-(2026-2029)',
+        'B.Sc in Biotechnology, Biochemistry and Genetics-(2026-2029)',
+        'B.Sc in Microbiology, Chemistry, and Genetics-(2026-2029)',
+        'M.Sc. in Bioinformatics-(2026-2028)',
+        'M. Tech in Computer Science and Engineering (Full Time)-(2026-2028)',
+        'M.Tech. in Power Electronics-(2026-2028)',
+        'Bachelor of Physiotherapy-(2026-2030)',
+        'BA - LL.B (Honors)-(2026-2031)',
+        'LL.M-(Business and Corporate Law)-(2026-2027)',
+         'B. Tech in Electrical and Electronics Engineering-(2026-2030)',
+         'B. Tech in Agricultural Engineering-(2026-2030)'
+
+    )
