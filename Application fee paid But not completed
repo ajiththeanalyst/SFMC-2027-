@@ -1,0 +1,20 @@
+SELECT
+    CONCAT(
+        Email, 
+        REPLACE(MobilePhone, '+91-', '91'), 
+        '_parent'
+    ) AS SubscriberKey,
+    Student_Full_Name__c,
+    Email,
+    Application_Fee_Paid__c,
+    REPLACE(MobilePhone, '+91-', '91') AS MobilePhone,
+    'IN' AS Locale,
+    hed__Application_Status__c,
+    CreatedDate,
+    LastModifiedDate,
+    LastActivityDate
+FROM contact_with_Application_Master
+WHERE
+    hed__Application_Status__c IN ('Incomplete', 'Started')
+    AND Application_Fee_Paid__c ='1'
+    AND CreatedDate >= '2025-11-01'
