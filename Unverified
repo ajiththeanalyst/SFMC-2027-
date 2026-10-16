@@ -1,16 +1,48 @@
-SELECT 
-    Name,
-    SubscriberKey,
-    Id,
-    Email,
-    Lead_Status__c,
-    Program_Batch__c,
-    School__c,
-    MobilePhone,
-    CreatedDate
-FROM Lead_Master_DataExtension
-WHERE Lead_Status__c = 'Unverified'
-AND CreatedDate > '2026-02-21 00:00:01'
+
+SELECT
+    l.Id,
+    l.Name,
+    l.Email,
+    l.Program_Name__c,
+    l.MobilePhone,
+
+    CASE
+        WHEN l.MobilePhone LIKE '+91-%'
+            THEN REPLACE(l.MobilePhone, '+91-', '91')
+        WHEN l.MobilePhone LIKE '91%'
+            THEN l.MobilePhone
+        ELSE '91' + l.MobilePhone
+    END AS ContactMobilePhone,
+
+    'IN' AS Locale,
+
+    l.Email + '_' +
+    CASE
+        WHEN l.MobilePhone LIKE '+91-%'
+            THEN REPLACE(l.MobilePhone, '+91-', '91')
+        WHEN l.MobilePhone LIKE '91%'
+            THEN l.MobilePhone
+        ELSE '91' + l.MobilePhone
+    END +
+    '_534019461' AS SubscriberKey,
+
+    u.Name AS CounselorName,
+    u.MobilePhone AS OwnerMobilePhone,
+    u.IsActive
+
+FROM [Lead_Salesforce] l
+
+LEFT JOIN [User_Salesforce] u
+    ON l.OwnerId = u.Id
+
+WHERE
+    l.Lead_Status__c = 'Unverified'
+    AND l.CreatedDate > '2026-01-01 14:42:11'
+    AND l.Program_Name__c IS NOT NULL
+
+    AND u.IsActive = 1
+    AND l.Email IS NOT NULL
+    AND l.MobilePhone IS NOT NULL
 AND Name NOT LIKE '%test%'
 AND Email NOT LIKE '%test%'
 AND Email NOT LIKE '%yopmail%'
