@@ -1,0 +1,52 @@
+
+SELECT
+    l.Id,
+    l.Name,
+    l.Email,
+    l.Program_Name__c as program,
+    
+    l.School__c as school,
+
+    CASE
+        WHEN l.MobilePhone LIKE '+91-%'
+            THEN REPLACE(l.MobilePhone, '+91-', '91')
+        WHEN l.MobilePhone LIKE '91%'
+            THEN l.MobilePhone
+        ELSE '91' + l.MobilePhone
+    END AS ContactMobilePhone,
+
+    'IN' AS Locale,
+
+    l.Email + '_' +
+    CASE
+        WHEN l.MobilePhone LIKE '+91-%'
+            THEN REPLACE(l.MobilePhone, '+91-', '91')
+        WHEN l.MobilePhone LIKE '91%'
+            THEN l.MobilePhone
+        ELSE '91' + l.MobilePhone
+    END +
+    '_534019461' AS SubscriberKey,
+
+    u.Name AS CounselorName,
+    u.MobilePhone AS OwnerMobilePhone
+   
+
+FROM [Lead_Salesforce] l
+
+LEFT JOIN [User_Salesforce] u
+    ON l.OwnerId = u.Id
+
+WHERE
+    l.CDOE__c != '1'
+    AND l.CreatedDate > '2026-10-15 14:42:11'
+    AND l.Program_Name__c IS NOT NULL
+
+    AND u.IsActive = 1
+    AND l.Email IS NOT NULL
+    AND l.MobilePhone IS NOT NULL
+AND l.Name NOT LIKE '%test%'
+AND l.Email NOT LIKE '%test%'
+AND l.Email NOT LIKE '%yopmail%'
+AND l.Enrolment_Year__c = '2027'
+
+	
