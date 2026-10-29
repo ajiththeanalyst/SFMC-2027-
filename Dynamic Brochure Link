@@ -49,4 +49,27 @@ AND l.Email NOT LIKE '%test%'
 AND l.Email NOT LIKE '%yopmail%'
 AND l.Enrolment_Year__c = '2027'
 
+
+
+
+Salesforce's recommended configuration is a Data Extension Entry Source scheduled using Automation. The automation must directly modify the Data Extension used as the journey's entry source; Journey Builder then evaluates contacts when the automation completes. 
+Salesforce Help+1
+
+Configure it for your 15-minute process
+1. In Automation Studio, keep your existing 15-minute schedule.
+2. Configure the SQL activity to populate a sendable entry Data Extension containing only newly eligible leads. For this recurring journey, use Append to add new rows rather than overwriting the entry source.
+3. In Journey Builder, select that Data Extension as the entry source.
+4. Set the entry source schedule type to Automation, and select your automation.
+5. Choose Evaluate new records only. For the first evaluation, choose whether to include all existing records or only records added after activation.
+6. Add an Email activity and select the approved Brochure Sharing Email.
+7. Set contact re-entry to No re-entry for this one-time brochure campaign, if that matches your campaign policy.
+8. Validate the journey with test leads before activating it.
+One important setting, Broh
+Because your original 100 leads already exist, make sure the first evaluation includes those 100 leads if they are eligible and haven't already received this brochure. Subsequent evaluations should process only newly added records. Salesforce documents these as separate first-run and recurring processing choices. 
+Salesforce Help+1
+
+
+Also, your current schedule ends at midnight on 31 October 2026, so extend it if the campaign must continue after that.
+
+Before you change your existing automation: tell me one thing — does your current SQL Query Activity use Overwrite or Append as the target Data Extension action? That determines the safest next step for connecting it to Journey Builder.
 	
