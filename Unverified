@@ -1,10 +1,11 @@
 
 SELECT
-    l.Id,
-    l.Name,
-    l.Email,
-    l.Program_Name__c,
+   
+    l.name,
+    l.email,
+    l.Program_Name__c as program,
     l.MobilePhone,
+    l.CDOE__c,
 
     CASE
         WHEN l.MobilePhone LIKE '+91-%'
@@ -36,13 +37,14 @@ LEFT JOIN [User_Salesforce] u
     ON l.OwnerId = u.Id
 
 WHERE
-    l.Lead_Status__c = 'Unverified'
-    AND l.CreatedDate > '2026-01-01 14:42:11'
+    l.Lead_Status__c = 'unverified'
+    
     AND l.Program_Name__c IS NOT NULL
-
+    AND l.CDOE__c !=1
     AND u.IsActive = 1
     AND l.Email IS NOT NULL
     AND l.MobilePhone IS NOT NULL
-AND Name NOT LIKE '%test%'
-AND Email NOT LIKE '%test%'
-AND Email NOT LIKE '%yopmail%'
+AND l.Name NOT LIKE '%test%'
+AND l.Email NOT LIKE '%test%'
+AND l.Email NOT LIKE '%yopmail%'
+and l.Enrolment_Year__c = '2027'
