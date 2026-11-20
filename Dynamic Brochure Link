@@ -1,4 +1,3 @@
-
 SELECT
     l.Id,
     l.Name,
@@ -37,7 +36,7 @@ LEFT JOIN [User_Salesforce] u
     ON l.OwnerId = u.Id
 
 WHERE
-    l.CDOE__c != '1'
+    l.CDOE__c != 1
     AND l.CreatedDate > '2026-10-15 14:42:11'
     AND l.Program_Name__c IS NOT NULL
 
@@ -48,7 +47,6 @@ AND l.Name NOT LIKE '%test%'
 AND l.Email NOT LIKE '%test%'
 AND l.Email NOT LIKE '%yopmail%'
 AND l.Enrolment_Year__c = '2027'
-
 
 
 
