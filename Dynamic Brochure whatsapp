@@ -2,23 +2,27 @@ SELECT
     l.Id,
     l.Name,
     l.Email,
-    l.Program_Name__c as program,
-    l.School__c as school,
+    l.Program_Name__c AS program,
+    l.School__c AS school,
 
     CASE
-        WHEN len(l.Phone)=10
-            THEN  '91' + l.Phone
+        WHEN LEN(l.Phone) = 10
+        THEN '91' + l.Phone
+        ELSE NULL
     END AS ContactMobilePhone,
 
     'IN' AS Locale,
 
-    l.Email + '_' + Phone +
+    l.Email + '_' +
+    CASE
+        WHEN LEN(l.Phone) = 10
+        THEN '91' + l.Phone
+        ELSE ''
+    END +
     '_534019461' AS SubscriberKey,
-   
 
     u.Name AS CounselorName,
     u.MobilePhone AS OwnerMobilePhone
-   
 
 FROM [Lead_Salesforce] l
 
@@ -29,12 +33,12 @@ WHERE
     l.CDOE__c != 1
     AND l.CreatedDate > '2026-10-15 14:42:11'
     AND l.Program_Name__c IS NOT NULL
-
     AND u.IsActive = 1
     AND l.Email IS NOT NULL
-    AND l.MobilePhone IS NOT NULL
-AND l.Name NOT LIKE '%test%'
-AND l.Email NOT LIKE '%test%'
-AND l.Email NOT LIKE '%yopmail%'
-AND l.Enrolment_Year__c = '2027'
-AND l.Country_Code__c = 'India (+91)'
+    AND l.Phone IS NOT NULL
+    AND LEN(l.Phone) = 10
+    AND l.Name NOT LIKE '%test%'
+    AND l.Email NOT LIKE '%test%'
+    AND l.Email NOT LIKE '%yopmail%'
+    AND l.Enrolment_Year__c = '2027'
+    AND l.Country_Code__c = 'India (+91)'
